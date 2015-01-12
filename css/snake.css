@@ -1,0 +1,37 @@
+.free-field {
+    background-color: cyan;
+}
+
+.obstacle {
+    background-color: darkblue;
+}
+
+.fruit {
+    background-color: red;
+}
+
+.snake {
+    background-color: darkgreen;
+}
+
+#container span {
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    margin: 0;
+    display: inline-block;
+}
+
+#container > div {
+    padding: 0;
+    margin: 0;
+    display: block;
+    height: 20px;
+}
+
+#score-section {
+    border: 2px solid purple;
+    background-color: deeppink;
+    border-radius: 3px;
+    width: 100px;
+}
