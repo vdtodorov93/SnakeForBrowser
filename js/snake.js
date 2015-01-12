@@ -20,9 +20,9 @@ var matrix = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 2, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
@@ -87,12 +87,25 @@ function visualizeMap(matrix) {
 var gameInterval;
 
 function startGame() {
+    $('#game-status').html('');
+    clearMatrix();
     document.onkeydown = changeDirectionEvent;
     theSnake = new Snake([new Position(5, 5), new Position(5, 6)]);
     applySnake(theSnake, matrix);
     updateScore(0);
     visualizeMap(matrix);
-    gameInterval = setInterval(playTurn, miliseconds)
+    gameInterval = setInterval(playTurn, miliseconds);
+}
+
+function clearMatrix() {
+    for(var i = 0; i < matrix.length; i+=1) {
+        for(var j = 0; j < matrix[0].length; j+=1) {
+            if(matrix[i][j] === FieldEnum.SNAKE) {
+                matrix[i][j] = FieldEnum.FREE;
+            }
+        }
+    }
+    score = -1;
 }
 
 function playTurn() {
@@ -128,10 +141,11 @@ function playTurn() {
         var pos = theSnake.body.pop();
         matrix[pos.x][pos.y] = FieldEnum.FREE;
     }
-    applySnake(theSnake, matrix);
-    visualizeMap(matrix);
     if(lost) {
         clearInterval(gameInterval);
+    } else {
+        applySnake(theSnake, matrix);
+        visualizeMap(matrix);
     }
 }
 
@@ -175,7 +189,7 @@ function changeDirectionEvent (e) {
 }
 
 function gameOver() {
-    $('#score-section').append('<span>GAME OVER</span>')
+    $('#game-status').html('GAME OVER')
 }
 
 function generateNewFruit() {
@@ -188,4 +202,4 @@ function generateNewFruit() {
     matrix[x][y] = FieldEnum.FRUIT;
 }
 
-startGame();
+$('#play-btn').on('click', startGame);
